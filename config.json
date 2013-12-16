@@ -1,0 +1,8 @@
+{
+    "sparqlEndpoint": "http://localhost:8890/sparql",
+    "defaultGraph": "http://kalitmo.org/itcancer",
+    "mysqlHost": "localhost",
+    "mysqlUser": "",
+    "mysqlPassword": "",
+    "mysqlItmoDatabase" : "annu_itmo"
+}

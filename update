@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PROJECT_PATH=$PWD/$(dirname `which $0`)
+
+# clean data
+rm $PROJECT_PATH/data/results.ttl
+rm $PROJECT_PATH/data/results.uniq.ttl
+rm $PROJECT_PATH/public/db.ttl.gz
+rm /tmp/results.ttl
+rm /tmp/mesh_ontology.ttl
+
+node $PROJECT_PATH/lib/utils/update_data.js
+
+isql exec="SPARQL CLEAR GRAPH <http://kalitmo.org/itcancer>;"
+cp $PROJECT_PATH/data/mesh_ontology.ttl /tmp/mesh_ontology.ttl
+isql exec="DB.DBA.TTLP (file_to_string_output ('/tmp/mesh_ontology.ttl'), '', 'http://kalitmo.org/itcancer', 64);"
+sort -u $PROJECT_PATH/data/results.ttl > $PROJECT_PATH/data/results.uniq.ttl
+cp $PROJECT_PATH/data/results.uniq.ttl /tmp/results.ttl
+isql exec="DB.DBA.TTLP (file_to_string_output ('/tmp/results.ttl'), '', 'http://kalitmo.org/itcancer', 64);"
+gzip -f /tmp/results.ttl
+mv /tmp/results.ttl.gz $PROJECT_PATH/public/db.ttl.gz

@@ -1,0 +1,341 @@
+<html>
+<head>
+	<meta charset="utf-8">
+    <link rel="stylesheet" href="/public/foundation/css/normalize.css" />
+    <link rel="stylesheet" href="/public/foundation/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://jvectormap.com/css/jquery-jvectormap-1.2.2.css" />
+
+    <style>
+    	.row {
+    		max-width: 100%;
+    	}
+
+/*    	body {
+    		background: url("/assets/img/background.jpg") no-repeat center center fixed;
+    		background: url("http://hqwide.com/wallpapers/l/1680x1050/57/gaussian_blur_blurred_background_1680x1050_56563.jpg") no-repeat center center fixed;
+		  	-webkit-background-size: cover;
+		  	-moz-background-size: cover;
+		  	-o-background-size: cover;
+		  	background-size: cover;
+    	}*/
+
+    	#header{
+    		background: #8D8D8D;
+    		text-align: center;
+			border-bottom: solid 30px #00B3DE;
+			padding: 0
+			-wekit-box-shadow: 0 0 10px;
+			-moz-box-shadow: 0 0 10px;
+			box-shadow: 0 0 10px;
+			margin-bottom: 30px;
+    	}
+
+    	a {
+    		color: #196493;
+    	}
+
+/*    	.alpha{
+    		background: rgba(255, 255, 255, 0.4);
+    	}*/
+
+    	.facets {
+			color: #4d4d4d;
+		}
+
+		.chart {
+			border: solid 1px lightgray;
+			margin-bottom: 30px;
+		}
+
+        .side-nav li {
+            font-size: 18px;
+        }
+
+		svg > rect{
+			fill: rgba(255, 255, 255, 0.4);
+		}
+
+        .hidden{
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="row">
+        <div class="small-12 columns alpha" id="header">
+            <img src="/public/img/aviesan_logo.jpg" />
+        </div>
+    </div>
+
+    <div class="row" id="layout">
+        <div class="small-2 columns" id="menu">
+            <ul class="side-nav">
+                <li><a href="#/team/documents">Teams</a></li>
+                <li><a href="#/publication/documents">Publications</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <div style="position:fixed;bottom:0">
+                <h5 style="margin-top:100px;margin-bottom:0;color:gray">Related services</h5>
+                <ul class="side-nav" style="padding-top:0">
+                    <li class="divider"></li>
+                    <li><a target="_blank" href="http://obirs.itcancer.mines-ales.fr">Obirs</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="small-7 columns" id="main"></div>
+
+        <div class="small-3 columns facets alpha" id="facets"></div>
+    </div>
+
+
+
+    <script type="text/template" id="template-team">
+        {{#each documents}}
+            <fieldset class="alpha" data-toggleinfo>
+            <legend>{{type.title}}</legend>
+            <h4>{{title}}</h4>
+            <div style="float:right"><a href="#" data-action="showMore" data-info-target="fullinfo">more infos</a></div>
+            <p>
+                <b>leader:</b>
+                {{#leader}}
+                    <i>
+                        {{!-- <a href="#publication/documents?author=http://kalitmo.org/author/{{classify title}}"</a>
+                            {{title}}
+                        </a>--}}
+                        {{title}}
+                        {{#isArray ../leader}} &bull; {{/isArray}}
+                    </i>
+                {{/leader}}
+            </p>
+            <div class="hidden fullinfo" data-info-toggle-name="hide">
+
+            {{#county}}
+                <p><b>county:</b>
+                    <a href="#" data-action='addToQuery' data-predicate="county" data-uri="{{uri}}">[+]</a>
+                    <a href="#" data-action='replaceQuery' data-predicate="county" data-uri="{{uri}}">
+                        {{title}}
+                    </a>
+                </p>
+            {{/county}}
+
+            {{#main_itmo}}
+                <p><b>main itmo:</b>
+                    <a href="#" data-action='addToQuery' data-predicate="main_itmo" data-uri="{{uri}}">[+]</a>
+                    <a href="#" data-action='replaceQuery' data-predicate="main_itmo" data-uri="{{uri}}">
+                        {{title}}
+                    </a>
+                <p>
+            {{/main_itmo}}
+
+            {{#secondary_itmo}}
+                <p><b>secondary itmo</b> 
+                    <a href="#" data-action='addToQuery' data-predicate="secondary_itmo" data-uri="{{uri}}">[+]</a>
+                    <a href="#" data-action='replaceQuery' data-predicate="secondary_itmo" data-uri="{{uri}}">
+                        {{title}}
+                    </a>
+                </p>
+            {{/secondary_itmo}}
+
+            <div class="small-6 columns">
+                <fieldset>
+                    <legend>affiliated to:</legend>
+                    <ul class="no-bullet">
+                    {{#eachAsArray affiliated_to}}
+                        <li><a href="#" data-action='addToQuery' data-predicate="affiliated_to" data-uri="{{uri}}">[+]</a>
+                        <a href="#" data-action='replaceQuery' data-predicate="affiliated_to" data-uri="{{uri}}">
+                            {{title}}
+                        </a></li>
+                    {{else}}
+                        <p>no affiliation found</p>
+                    {{/eachAsArray}}
+                    </ul>
+                </fieldset>
+
+                <fieldset>
+                    <legend>keywords:</legend>
+                    <ul class="no-bullet">
+                    {{#eachAsArray keyword}}
+                        <li><a href="#" data-action='addToQuery' data-predicate="keyword" data-uri="{{uri}}">[+]</a>
+                        <a href="#" data-action='replaceQuery' data-predicate="keyword" data-uri="{{uri}}">
+                            {{title}}
+                        </a></li>
+                    {{else}}
+                        <p>no keyword found</p>
+                    {{/eachAsArray}}
+                    </ul>
+                </fieldset>
+
+                <fieldset>
+                    <legend>methodological keywords:</legend>
+                    <ul class="no-bullet">
+                    {{#eachAsArray methodological}}
+                        <li><a href="#" data-action='addToQuery' data-predicate="methodological" data-uri="{{uri}}">[+]</a>
+                        <a href="#" data-action='replaceQuery' data-predicate="methodological" data-uri="{{uri}}">
+                            {{title}}
+                        </a></li>
+                    {{else}}
+                        <p>no methodological keyword found</p>
+                    {{/eachAsArray}}
+                    </ul>
+                </fieldset>
+
+                <fieldset>
+                    <legend>bio resources:</legend>
+                    <ul class="no-bullet">
+                    {{#eachAsArray bio_resource}}
+                        <li><a href="#" data-action='addToQuery' data-predicate="bio_resource" data-uri="{{uri}}">[+]</a>
+                        <a href="#" data-action='replaceQuery' data-predicate="bio_resource" data-uri="{{uri}}">
+                            {{title}}
+                        </a></li>
+                    {{else}}
+                        <p>no bio resources found</p>
+                    {{/eachAsArray}}
+                    </ul>
+                </fieldset>
+            </div>
+
+            <div class="small-6 columns">
+                <fieldset>
+                    <legend>published:</legend>
+                    <ul>
+
+                    {{#eachAsArray published}}
+                        {{#uri}}
+                            <li>
+                                <i><a style="color:#333" href="#publication/documents?uri={{this}}">{{../title}}</a></i>
+                                <a href="{{uri2pubmed this}}" target="_blank"><small>pubmed</small>&#8594;</a>
+                            </li>
+                        {{/uri}}
+                    {{else}}
+                        <p>no publications</p>
+                    {{/eachAsArray}}
+                    </ul>
+                </fieldset>
+
+                <fieldset>
+                    <legend>mesh concepts:</legend>
+                    <ul class="no-bullet" data-toggleinfo>
+                        {{#eachSlice mesh_concept 0 5}}
+                        <li>
+                            <a href="#" data-action='addToQuery' data-predicate="mesh_concept" data-uri="{{uri}}">[+]</a>
+                            <a href="#" data-action='replaceQuery' data-predicate="mesh_concept" data-uri="{{uri}}">
+                                {{title}}
+                            </a>
+                        </li>
+                        {{else}}
+                            <p>no concept found</p>
+                        {{/eachSlice}}
+                        {{#gt mesh_concept.length 5}}
+                            <li>
+                                <a href="#" data-action="showMore"><small>more</small></a>
+                            <li>
+                            {{#eachSlice mesh_concept 5 100}}
+                            <li class="hidden moreinfo">
+                                <a href="#" data-action='addToQuery' data-predicate="mesh_concept" data-uri="{{uri}}">[+]</a>
+                                <a href="#" data-action='replaceQuery' data-predicate="mesh_concept" data-uri="{{uri}}">
+                                    {{title}}
+                                </a>
+                            </li>
+                            {{/eachSlice}}
+                        {{/gt}}
+                    </ul>
+                </fieldset>
+            </div>
+            </div>
+            </fieldset>
+        {{/each}}
+    </script>
+
+
+   <script type="text/template" id="template-publication">
+        {{#each documents}}
+            <fieldset class="alpha" data-toggleinfo>
+            <legend>{{type.title}}</legend>
+            <h4>
+                {{title}}
+                <a href="{{uri2pubmed uri}}" target="_blank"><small style="color:#2ba6cb">pubmed</small>&#8594;</a>
+            </h4>
+            <div style="float:right"><a href="#" data-action="showMore" data-info-target="fullinfo">more infos</a></div>
+            {{#publishing_year}}
+                <p><b>published in</b>
+                    <a href="#" data-action='addToQuery' data-predicate="publishing_year" data-uri="{{uri}}">[+]</a>
+                    <a href="#" data-action='replaceQuery' data-predicate="publishing_year" data-uri="{{uri}}">
+                        {{title}}
+                    </a>
+                </p>
+            {{/publishing_year}}
+
+            <div class="hidden fullinfo" data-info-toggle-name="hide">
+
+
+            {{#if language}}
+                <p><b>language:</b>
+                    {{#language}}
+                    <a href="#" data-action='addToQuery' data-predicate="language" data-uri="{{uri}}">[+]</a>
+                    <a href="#" data-action='replaceQuery' data-predicate="language" data-uri="{{uri}}">
+                        {{title}}
+                    </a>
+                    {{/language}}
+                </p>
+            {{/if}}
+            
+
+
+            <div class="small-6 columns">
+                <fieldset>
+                    <legend>authors:</legend>
+                    <ul class="no-bullet">
+                    {{#eachSlice author 0 7}}
+                        <li><a href="#" data-action='addToQuery' data-predicate="author" data-uri="{{uri}}">[+]</a>
+                        <a href="#" data-action='replaceQuery' data-predicate="author" data-uri="{{uri}}">
+                            {{title}}
+                        </a></li>
+                    {{else}}
+                        <p>no authors found</p>
+                    {{/eachSlice}}
+                    </ul>
+                </fieldset>
+            </div>
+
+            <div class="small-6 columns">
+                <fieldset>
+                    <legend>mesh concepts:</legend>
+                    <ul class="no-bullet">
+                    {{#eachSlice mesh_concept 0 7}}
+                        <li><a href="#" data-action='addToQuery' data-predicate="mesh_concept" data-uri="{{uri}}">[+]</a>
+                        <a href="#" data-action='replaceQuery' data-predicate="mesh_concept" data-uri="{{uri}}">
+                            {{title}}
+                        </a></li>
+                    {{else}}
+                        <p>no concept found</p>
+                    {{/eachSlice}}
+                    </ul>
+                </fieldset>
+            </div>
+
+            </fieldset>
+        {{/each}}
+    </script>
+
+    <script src="/public/js/vendors/jquery-1.9.1.js"></script>
+
+    <script src="/public/js/vendors/underscore-1.5.1.js"></script>
+    <script src="/public/js/vendors/underscore.string-2.3.0.min.js"></script>
+    <script src="/public/js/vendors/backbone-1.0.0.js"></script>
+    <script src="/public/js/vendors/handlebars-1.0.0.js"></script>
+    
+    <script src="/public/js/lib/handlebars-helpers.js"></script>
+    <script src="/public/js/lib/jvectormapping.js"></script>
+    <script src="/public/js/lib/kalitmo.js"></script>
+
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+    <script src="http://jvectormap.com/js/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="http://jvectormap.com/js/jquery-jvectormap-fr-merc-en.js"></script>
+</body>
+</html>

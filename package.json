@@ -1,0 +1,29 @@
+{
+  "name": "kalitmo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Kalitmo is an ITMO information plateform",
+  "dependencies": {
+    "coffee-script": "~1.6.3",
+    "express": "~3.4.2",
+    "underscore": "~1.5.2",
+    "underscore.string": "~2.3.3",
+    "sparql": "~0.1.3",
+    "async": "~0.2.9",
+    "mysql": "~2.0.0-alpha9",
+    "request": "~2.27.0",
+    "cheerio": "~0.12.2",
+    "JSONStream": "~0.7.1",
+    "querystring": "~0.2.0",
+    "coffee-script": "~1.6.3"
+  },
+  "scripts": {
+    "start": "./kalitmo",
+    "compile": "./node_modules/coffee-script/bin/cake compile"
+  },
+  "main": "app.js",
+  "repository": "",
+  "author": "",
+  "license": "CECILL-B",
+  "readmeFilename": "README.md"
+}
