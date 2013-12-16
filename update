@@ -11,11 +11,23 @@ rm /tmp/mesh_ontology.ttl
 
 node $PROJECT_PATH/lib/utils/update_data.js
 
+
+(cd $PROJECT_PATH
+echo "clear db"
 isql exec="SPARQL CLEAR GRAPH <http://kalitmo.org/itcancer>;"
-cp $PROJECT_PATH/data/mesh_ontology.ttl /tmp/mesh_ontology.ttl
+sleep 5
+cp data/mesh_ontology.ttl /tmp/mesh_ontology.ttl
+echo "insert mesh_ontology.ttl"
 isql exec="DB.DBA.TTLP (file_to_string_output ('/tmp/mesh_ontology.ttl'), '', 'http://kalitmo.org/itcancer', 64);"
-sort -u $PROJECT_PATH/data/results.ttl > $PROJECT_PATH/data/results.uniq.ttl
-cp $PROJECT_PATH/data/results.uniq.ttl /tmp/results.ttl
+sleep 5
+echo "remove duplicated lines"
+sort -u data/results.ttl > data/results.uniq.ttl
+cp data/results.uniq.ttl /tmp/results.ttl
+sleep 5
+echo "insert results.ttl"
 isql exec="DB.DBA.TTLP (file_to_string_output ('/tmp/results.ttl'), '', 'http://kalitmo.org/itcancer', 64);"
+echo "zip db in /public"
 gzip -f /tmp/results.ttl
-mv /tmp/results.ttl.gz $PROJECT_PATH/public/db.ttl.gz
+mv /tmp/results.ttl.gz public/db.ttl.gz
+)
+
