@@ -44,19 +44,19 @@ Kalimo will be accessible at the following address: http://localhost:4000/public
 
 ## Deployement
 
-If you want to deploy obirs on a server, you can use pm2 to detach and monitor the process:
+If you want to deploy kalitmo on a server, you can use pm2 to detach and monitor the process:
 
 	$ sudo npm install -g pm2
-	$ pm2 start obirs
+	$ pm2 start kalitmo
 
-To stop obirs, type:
+To stop kalitmo, type:
 
-	$ pm2 stop obirs
+	$ pm2 stop kalitmo
 
-After that, if you want to launch obirs the other way (say `./obirs`) it may throw and error meaning that the port is already taken. All you have to do is to kill the pm2 daemon:
+After that, if you want to launch kalitmo the other way (say `./kalitmo`) it may throw and error meaning that the port is already taken. All you have to do is to kill the pm2 daemon:
 
 	$ pm2 kill
-	$ ./obirs
+	$ ./kalitmo
 
 Kalimo will be accessible at the following address: http://localhost:4000/public/kalitmo.html
 
